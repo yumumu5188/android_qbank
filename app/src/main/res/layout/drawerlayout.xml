@@ -10,6 +10,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="#ffffff">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/srl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <GridView
             android:id="@+id/test_gridview"
             android:layout_width="match_parent"
@@ -22,6 +26,7 @@
             android:numColumns="2"
             android:verticalSpacing="10dp"
             android:horizontalSpacing="10dp"></GridView>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
     <!--侧滑菜单-->
     <RelativeLayout
@@ -43,6 +48,7 @@
                 app:border_width="5dp"
                 app:border_color="@color/line"/>
             <TextView
+                android:id="@+id/tv_xiaoli"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="xiaoli"/>

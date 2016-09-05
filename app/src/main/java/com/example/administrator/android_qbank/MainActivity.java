@@ -1,12 +1,14 @@
 package com.example.administrator.android_qbank;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -60,9 +62,15 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_tuichu;
     @ViewInject(value = R.id.test_gridview)
     private GridView test_gridview;
+    @ViewInject(R.id.tv_xiaoli)
+    private TextView tv_xiaoli;
+    @ViewInject(value = R.id.srl)
+    private SwipeRefreshLayout srl;
 
     List<GridViewMessages> list;
     GridViewAdapter gridviewadapter;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +100,23 @@ public class MainActivity extends AppCompatActivity {
         };
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        pref = getSharedPreferences("data",MODE_PRIVATE);
+        editor = pref.edit();
+        //tv_xiaoli.setText(pref.getString("nickname","xiaoli"));
         init();
+        srl.setColorSchemeResources(R.color.color1,R.color.color2,R.color.color3,R.color.color4);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Handler ha = new Handler();
+                ha.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        init();
+                    }
+                },2000);
+            }
+        });
         test_gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -106,6 +130,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        tv_xiaoli.setText(pref.getString("nickname","xiaoli"));
+    }
+
     //通过消息机制确保加载完全的list传入gridviewadapter
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -114,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Handler 收到了List加载完全的消息");
                 gridviewadapter = new GridViewAdapter(MainActivity.this,list);
                 test_gridview.setAdapter(gridviewadapter);
+                srl.setRefreshing(false);
             }
             return false;
         }
@@ -192,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
             }break;
             case R.id.ln_shoucang:
             {
-
+                Intent intent = new Intent(MainActivity.this,CollectActivity.class);
+                startActivity(intent);
             }break;
         }
     }

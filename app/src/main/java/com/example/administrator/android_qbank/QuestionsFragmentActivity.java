@@ -1,6 +1,8 @@
 package com.example.administrator.android_qbank;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,6 +33,7 @@ import fragment.MultiSelectFragment;
 import fragment.ShortAnswerFragment;
 import fragment.SingleFragment;
 import fragmentadapter.QuestionsFragmentAdapter;
+import helper.MyDBHelper;
 import pojo.Questions;
 import widget.MyViewPager;
 
@@ -59,6 +62,8 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
     private ShortAnswerFragment shortanswerfragment;
     private List<Fragment> fragmentlist;
     private QuestionsFragmentAdapter questionsfragmentadapter;
+    MyDBHelper helper;
+    SQLiteDatabase sd;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,6 +80,7 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
         question = (Questions) intent.getSerializableExtra("question");
         //题型id
         typeid = question.getTypeid();
+        Aid = typeid;
         //题目的id
         id = question.getId();
         Cid = id;
@@ -120,8 +126,8 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
         switch (view.getId()){
             case R.id.im_shangyiti:
             {
-                System.out.println("shang yi ti");
-                System.out.println(Cid+"first Cid");
+//                System.out.println("shang yi ti");
+//                System.out.println(Cid+"first Cid");
                 if (Cid == 1){
                     Toast.makeText(QuestionsFragmentActivity.this, "这已是第一题", Toast.LENGTH_SHORT).show();
                 }
@@ -131,7 +137,25 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
                 }
             }break;
             case R.id.im_shoucang:
-            {}break;
+            {
+                a = -1;
+                //Toast.makeText(QuestionsFragmentActivity.this, "你点击了收藏", Toast.LENGTH_SHORT).show();
+                helper = new MyDBHelper(QuestionsFragmentActivity.this);
+                sd = helper.getWritableDatabase();
+                Cursor cursor = sd.rawQuery("select * from question",null);
+                while (cursor.moveToNext()){
+                    a = cursor.getInt(0);
+                    if (a == Cid)
+                    {
+                        Toast.makeText(QuestionsFragmentActivity.this, "该题已被收藏过", Toast.LENGTH_SHORT).show();
+                        a = 0;
+                        break;
+                    }
+                }
+                if (a>0||a==-1){
+                    Collect();
+                }
+            }break;
             case R.id.im_xiayiti:
             {
                 if (Cid == 9)
@@ -143,6 +167,44 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
             }break;
         }
     }
+    int a;
+    int b,c,d;
+    String e, f,g,h;
+    private void Collect(){
+        RequestParams params = new RequestParams("http://115.29.136.118:8080/web-question/app/question?method=findone");
+        params.addBodyParameter("id",String.valueOf(Cid));
+        params.addBodyParameter("user_id",String.valueOf(2));
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject json1 = new JSONObject(result);
+                    h = json1.getLong("pubTime")+"";
+                    e = json1.getString("content");
+                    f = json1.getString("answer");
+                    c = json1.getInt("typeid");
+                    d = json1.getInt("cataid");
+                    b = json1.getInt("id");
+                    if ((Aid==1)||(Aid==2)) {
+                        g = json1.getString("options");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                sd.execSQL("insert into question(id,pubTime,typeid,cataid,content,answer,options) values(?,?,?,?,?,?,?)",new Object[]{b,h,c,d,e,f,g});
+                Toast.makeText(QuestionsFragmentActivity.this, "收藏成功", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {}
+            @Override
+            public void onCancelled(CancelledException cex) {}
+            @Override
+            public void onFinished() {}
+        });
+    }
+
+
+
     private void getUp(){
         RequestParams params = new RequestParams("http://115.29.136.118:8080/web-question/app/question?method=prev");
         params.addBodyParameter("id",String.valueOf(Cid));
@@ -184,6 +246,7 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
     String title1,title2,title3,title4;
     String Acontent;
     String Aanwser;
+    String options;
     private void getQuestionsMessages(String result){
         try {
             JSONObject json1 = new JSONObject(result);
@@ -193,9 +256,9 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
             Bid = json1.getInt("cataid");
             Cid = json1.getInt("id");
             System.out.println(Aid+""+Bid+""+Cid);
-            System.out.println("lallalallalalalallallala");
+            //System.out.println("lallalallalalalallallala");
             if ((Aid==1)||(Aid==2)) {
-                String options = json1.getString("options");
+                options = json1.getString("options");
                 JSONArray jsonarray2 = new JSONArray(options);
                 for (int j = 0; j < jsonarray2.length(); j++) {
                     JSONObject json3 = jsonarray2.getJSONObject(j);

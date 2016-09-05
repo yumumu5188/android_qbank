@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class SettingActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    EditText et_setting_name;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,9 +106,13 @@ public class SettingActivity extends AppCompatActivity{
                 LayoutInflater inflater = LayoutInflater.from(this);
                 View nicknameview = inflater.inflate(R.layout.item3,null);
                 builder.setView(nicknameview);
+                et_setting_name = (EditText) nicknameview.findViewById(R.id.et_setting_name);
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        String nickname = et_setting_name.getText().toString();
+                        editor.putString("nickname",nickname);
+                        editor.commit();
                     }
                 });
                 builder.show();
