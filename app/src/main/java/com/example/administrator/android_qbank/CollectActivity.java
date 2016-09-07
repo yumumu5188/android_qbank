@@ -100,6 +100,7 @@ public class CollectActivity extends AppCompatActivity{
                 Questions question = collectlist.get(position);
                 Intent intent = new Intent(CollectActivity.this,QuestionsFragmentActivity.class);
                 intent.putExtra("question",question);
+                intent.putExtra("size",collectlist.size());
                 startActivity(intent);
             }
         });

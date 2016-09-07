@@ -1,8 +1,10 @@
 package com.example.administrator.android_qbank;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +26,7 @@ import widget.LoadingDialog;
  * Created by Administrator on 2016/8/29 0029.
  */
 @ContentView(value = R.layout.loginactivity)
-public class LoginActivity extends Activity{
+public class LoginActivity extends AppCompatActivity{
 
     @ViewInject(value = R.id.et_username)
     private EditText et_username;
@@ -38,11 +40,17 @@ public class LoginActivity extends Activity{
     private TextView tv_register;
 
     LoadingDialog dialog;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         x.view().inject(this);
-        setTitle("登录");
+        toolbar = (Toolbar) findViewById(R.id.mtoolbar);
+        toolbar.setTitle("登录");//设置Toolbar标题
+        toolbar.setBackgroundColor(Color.parseColor("#97282F"));
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
+        setSupportActionBar(toolbar);
+
     }
 
     @Event(value = R.id.btn_login,type = View.OnClickListener.class)

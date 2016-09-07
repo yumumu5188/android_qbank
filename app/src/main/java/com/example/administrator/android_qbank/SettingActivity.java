@@ -115,12 +115,19 @@ public class SettingActivity extends AppCompatActivity{
                         editor.commit();
                     }
                 });
+                builder.setNegativeButton("取消",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
                 builder.show();
                 Toast.makeText(SettingActivity.this, "你点击了昵称设置", Toast.LENGTH_SHORT).show();
             }break;
             case R.id.setting_e:{
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
+//                Intent intent = new Intent(Intent.ACTION_MAIN);
+//                intent.addCategory(Intent.CATEGORY_HOME);
+                Intent intent = new Intent(SettingActivity.this,LoginActivity.class);
                 startActivity(intent);
                 Toast.makeText(SettingActivity.this, "你点击了退出登录", Toast.LENGTH_SHORT).show();
             }break;

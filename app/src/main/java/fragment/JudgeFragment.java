@@ -31,13 +31,13 @@ public class JudgeFragment extends Fragment{
         View view = inflater.inflate(R.layout.judgefragment,null);
         tv_judge_a = (TextView) view.findViewById(R.id.tv_judge_a);
         tv_judge_c = (TextView) view.findViewById(R.id.tv_judge_c);
-        getData(id);
+        getData();
         return view;
     }
     public void setJudgeQuestions(int id){
         this.id = id;
     }
-    public void getData(int id){
+    public void getData(){
         RequestParams params = new RequestParams("http://115.29.136.118:8080/web-question/app/question?method=findone");
         params.addBodyParameter("id",String.valueOf(id));
         params.addBodyParameter("user_id",String.valueOf(2));

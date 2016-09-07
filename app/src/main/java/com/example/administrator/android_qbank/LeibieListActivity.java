@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -38,12 +41,15 @@ public class LeibieListActivity extends AppCompatActivity {
 
     @ViewInject(value = R.id.lv_02)
     private ListView lv_02;
+    @ViewInject(value = R.id.srl2)
+    private SwipeRefreshLayout srl2;
 
     private Toolbar toolbar;
     private int catelogId;
     private List<Questions> leibielist;
     private SearchAdapter leibieadapter;
     private int a;
+    LinearLayout ln_ln;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,9 +74,27 @@ public class LeibieListActivity extends AppCompatActivity {
                 Questions question = leibielist.get(position);
                 Intent intent = new Intent(LeibieListActivity.this,QuestionsFragmentActivity.class);
                 intent.putExtra("question",question);
+                intent.putExtra("size",leibielist.size());
+                intent.putExtra("leibie",catelogId);
                 startActivity(intent);
             }
         });
+        srl2.setColorSchemeResources(R.color.color1,R.color.color2,R.color.color3,R.color.color4);
+        srl2.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Handler haaa = new Handler();
+                haaa.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        srl2.setRefreshing(false);
+                    }
+                },2000);
+            }
+        });
+        LayoutInflater inflater = LayoutInflater.from(LeibieListActivity.this);
+        ln_ln = (LinearLayout) inflater.inflate(R.layout.footview,null);
+        lv_02.addFooterView(ln_ln);
     }
 
     Handler handler = new Handler(new Handler.Callback() {
@@ -91,7 +115,6 @@ public class LeibieListActivity extends AppCompatActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                System.out.println(result+"..........leibielistactivity");
                 pushData(result);
             }
             @Override

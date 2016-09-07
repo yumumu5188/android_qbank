@@ -64,6 +64,8 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
     private QuestionsFragmentAdapter questionsfragmentadapter;
     MyDBHelper helper;
     SQLiteDatabase sd;
+    int size;
+    int leibie;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,15 +80,17 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         question = (Questions) intent.getSerializableExtra("question");
-        //题型id
+        size = intent.getIntExtra("size",0);
         typeid = question.getTypeid();
         Aid = typeid;
-        //题目的id
         id = question.getId();
         Cid = id;
+        leibie = intent.getIntExtra("leibie",0);
+        if (leibie == 2)
+            toolbar.setTitle((Cid-2)+"/"+size+"题目详情");
+        else
+            toolbar.setTitle(Cid+"/"+size+"题目详情");
         selectfragment(typeid);
-
-        //System.out.println(questionsfragmentadapter.getId()+"myviewpager++++++++++++++++++++++++++");
     }
     private void selectfragment(int typeid){
         fragmentlist = new ArrayList<Fragment>();
@@ -102,22 +106,18 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
         v_02.setAdapter(questionsfragmentadapter);
         if (typeid == 1){
             singlefragment.setSingleQuestions(id);
-            System.out.println("我是单选");
             v_02.setCurrentItem(0);
         }
         if (typeid == 2) {
             multiselectfragment.setMultiSelectQuestions(id);
-            System.out.println("我是多选");
             v_02.setCurrentItem(1);
         }
         if (typeid == 3) {
             judgefragment.setJudgeQuestions(id);
-            System.out.println("我是判断");
             v_02.setCurrentItem(2);
         }
         if (typeid == 4) {
             shortanswerfragment.setShortAnswerQuestions(id);
-            System.out.println("我是简答");
             v_02.setCurrentItem(3);
         }
     }
@@ -126,20 +126,25 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
         switch (view.getId()){
             case R.id.im_shangyiti:
             {
-//                System.out.println("shang yi ti");
-//                System.out.println(Cid+"first Cid");
-                if (Cid == 1){
-                    Toast.makeText(QuestionsFragmentActivity.this, "这已是第一题", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    upnext = 99;
-                    getUp();
+                if (leibie == 2){
+                    if (Cid == 3){
+                        Toast.makeText(QuestionsFragmentActivity.this, "这已是第一题", Toast.LENGTH_SHORT).show();
+                    } else {
+                        upnext = 99;
+                        getUp();
+                    }
+                }else {
+                    if (Cid == 1) {
+                        Toast.makeText(QuestionsFragmentActivity.this, "这已是第一题", Toast.LENGTH_SHORT).show();
+                    } else {
+                        upnext = 99;
+                        getUp();
+                    }
                 }
             }break;
             case R.id.im_shoucang:
             {
                 a = -1;
-                //Toast.makeText(QuestionsFragmentActivity.this, "你点击了收藏", Toast.LENGTH_SHORT).show();
                 helper = new MyDBHelper(QuestionsFragmentActivity.this);
                 sd = helper.getWritableDatabase();
                 Cursor cursor = sd.rawQuery("select * from question",null);
@@ -158,11 +163,21 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
             }break;
             case R.id.im_xiayiti:
             {
-                if (Cid == 9)
-                    Toast.makeText(QuestionsFragmentActivity.this, "这已是最后一题", Toast.LENGTH_SHORT).show();
-                else{
-                    upnext = 88;
-                    getNext();
+                if (leibie == 1){
+                    if (Cid == 2){
+                        Toast.makeText(QuestionsFragmentActivity.this, "这已是最后一题", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        upnext = 88;
+                        getNext();
+                    }
+                }else {
+                    if (Cid == 9)
+                        Toast.makeText(QuestionsFragmentActivity.this, "这已是最后一题", Toast.LENGTH_SHORT).show();
+                    else {
+                        upnext = 88;
+                        getNext();
+                    }
                 }
             }break;
         }
@@ -212,7 +227,6 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                System.out.println(result);
                 getQuestionsMessages(result);
             }
             @Override
@@ -230,7 +244,6 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                System.out.println(result);
                 getQuestionsMessages(result);
             }
             @Override
@@ -255,8 +268,6 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
             Aid = json1.getInt("typeid");
             Bid = json1.getInt("cataid");
             Cid = json1.getInt("id");
-            System.out.println(Aid+""+Bid+""+Cid);
-            //System.out.println("lallalallalalalallallala");
             if ((Aid==1)||(Aid==2)) {
                 options = json1.getString("options");
                 JSONArray jsonarray2 = new JSONArray(options);
@@ -275,73 +286,80 @@ public class QuestionsFragmentActivity extends AppCompatActivity{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        System.out.println(Acontent+Aanwser+Aid+Bid+Cid);
         if (upnext == 99){
             switch (Aid){
                 case 1:
                 {
                     singlefragment.setSingleQuestions(Cid);
-                    //singlefragment.getData(Cid);
                     if (Aid == questionsfragmentadapter.getId()+1)
                         singlefragment.settext(Acontent,Aanwser,title1,title2,title3,title4);
                     v_02.setCurrentItem(0);
                 }break;
                 case 2:{
                     multiselectfragment.setMultiSelectQuestions(Cid);
-                    //multiselectfragment.getData(Cid);
                     if (Aid == questionsfragmentadapter.getId()+1)
                         multiselectfragment.settext(Acontent,Aanwser,title1,title2,title3,title4);
                     v_02.setCurrentItem(1);
                 }break;
                 case 3:{
                     judgefragment.setJudgeQuestions(Cid);
-                    //judgefragment.getData(Cid);
                     if (Aid == questionsfragmentadapter.getId()+1)
                         judgefragment.settext(Acontent,Aanwser);
                     v_02.setCurrentItem(2);
                 }break;
                 case 4:{
                     shortanswerfragment.setShortAnswerQuestions(Cid);
-                    //shortanswerfragment.getData(Cid);
                     if (Aid == questionsfragmentadapter.getId()+1)
-                        shortanswerfragment.settext(Acontent,Aanwser);
+                            shortanswerfragment.settext(Acontent,Aanwser);
                     v_02.setCurrentItem(3);
+                    shortanswerfragment.settext(Acontent,Aanwser);
                 }break;
             }
+            toolbar.setTitle(Cid+"/"+size+"题目详情");
+            if (leibie == 2)
+                toolbar.setTitle((Cid-2)+"/"+size+"题目详情");
         }
         if (upnext == 88){
             switch (Aid){
                 case 1:
                 {
                     singlefragment.setSingleQuestions(Cid);
-                    //singlefragment.getData(Cid);
-                    if (Aid == questionsfragmentadapter.getId()+1)
-                        singlefragment.settext(Acontent,Aanwser,title1,title2,title3,title4);
+                    if (Aid == questionsfragmentadapter.getId()+1) {
+                        singlefragment.settext(Acontent, Aanwser, title1, title2, title3, title4);
+                    }
                     v_02.setCurrentItem(0);
                 }break;
                 case 2:{
                     multiselectfragment.setMultiSelectQuestions(Cid);
-                    //multiselectfragment.getData(Cid);
-                    if (Aid == questionsfragmentadapter.getId()+1)
-                        multiselectfragment.settext(Acontent,Aanwser,title1,title2,title3,title4);
+                    if (Aid == questionsfragmentadapter.getId()+1) {
+                        multiselectfragment.settext(Acontent, Aanwser, title1, title2, title3, title4);
+                    }
                     v_02.setCurrentItem(1);
                 }break;
                 case 3:{
                     judgefragment.setJudgeQuestions(Cid);
-                    //judgefragment.getData(Cid);
-                    if (Aid == questionsfragmentadapter.getId()+1)
-                        judgefragment.settext(Acontent,Aanwser);
+                    if (Aid == questionsfragmentadapter.getId()+1) {
+                        judgefragment.settext(Acontent, Aanwser);
+                    }
                     v_02.setCurrentItem(2);
                 }break;
                 case 4:{
                     shortanswerfragment.setShortAnswerQuestions(Cid);
-                    //shortanswerfragment.getData(Cid);
-                    if (Aid == questionsfragmentadapter.getId()+1)
+                    if (Aid == questionsfragmentadapter.getId()+1){
+                        System.out.println("该方法执行了");
                         shortanswerfragment.settext(Acontent,Aanwser);
-                    v_02.setCurrentItem(3);
+                    } else{
+                        v_02.setCurrentItem(3);
+                        shortanswerfragment.settext(Acontent,Aanwser);
+                    }
+
                 }break;
             }
+            toolbar.setTitle(Cid+"/"+size+"题目详情");
+            if (leibie == 2)
+                toolbar.setTitle((Cid-2)+"/"+size+"题目详情");
         }
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

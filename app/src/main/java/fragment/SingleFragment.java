@@ -32,13 +32,13 @@ public class SingleFragment extends Fragment{
         tv_single_c = (TextView) view.findViewById(R.id.tv_single_c);
         tv_single_d = (TextView) view.findViewById(R.id.tv_single_d);
         tv_single_e = (TextView) view.findViewById(R.id.tv_single_e);
-        getData(id);
+        getData();
         return view;
     }
     public void setSingleQuestions(int id){
         this.id = id;
     }
-    public void getData(int id){
+    public void getData(){
         RequestParams params = new RequestParams("http://115.29.136.118:8080/web-question/app/question?method=findone");
         params.addBodyParameter("id",String.valueOf(id));
         params.addBodyParameter("user_id",String.valueOf(2));

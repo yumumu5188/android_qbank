@@ -39,6 +39,7 @@ public class FragmentActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         x.view().inject(this);
+        setTitle("欢迎你");
         list = new ArrayList<Fragment>();
         list.add(new FirstFragment());
         list.add(new SecondFragment());

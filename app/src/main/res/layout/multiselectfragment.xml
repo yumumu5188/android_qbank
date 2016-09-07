@@ -26,7 +26,8 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:checked="true"/>
         <TextView
             android:id="@+id/tv_multiselect_b"
             android:layout_width="wrap_content"
@@ -45,7 +46,8 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:checked="true"/>
         <TextView
             android:id="@+id/tv_multiselect_c"
             android:layout_width="wrap_content"
@@ -63,7 +65,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp" />
         <TextView
             android:id="@+id/tv_multiselect_d"
             android:layout_width="wrap_content"
@@ -81,7 +83,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp" />
         <TextView
             android:id="@+id/tv_multiselect_e"
             android:layout_width="wrap_content"

@@ -6,37 +6,55 @@
     android:background="@color/bg">
 
     <include layout="@layout/toolbar"></include>
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:layout_height="46.0dip"
+        android:background="@android:color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+        <EditText
+            android:id="@+id/et_timu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:layout_weight="1"
+            android:background="@drawable/input_search_bg"
+            android:ellipsize="end"
+            android:gravity="start|center_vertical"
+            android:inputType="text"
+            android:hint="搜索试题名称"
+            android:singleLine="true"
+            android:textColor="#ff242e38"
+            android:textColorHint="#ff929292"
+            android:textSize="14sp" />
         <TextView
             android:id="@+id/tv_timu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
+            android:layout_marginRight="10.0dip"
+            android:gravity="center"
+            android:textColor="#ff929292"
             android:text="搜索"
-            android:textSize="20sp"
-            android:textColor="#ff929292"/>
-        <EditText
-            android:id="@+id/et_timu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/tv_timu"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/input_search_bg"
-            android:drawablePadding="16dp"
-            android:hint="请输入你要查找的题目："
-            android:singleLine="true"
-            android:textSize="16sp"
-            android:textColorHint="#ff929292"
-            android:textColor="#ff929292"/>
-    </RelativeLayout>
+            android:textSize="16.0sp" />
+    </LinearLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ListView
         android:id="@+id/lv_01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
-
+    <TextView
+        android:id="@+id/tv_wanquan1"
+        android:layout_below="@+id/lv_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff929292"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:text="已加载完全"/>
+</RelativeLayout>
 </LinearLayout>

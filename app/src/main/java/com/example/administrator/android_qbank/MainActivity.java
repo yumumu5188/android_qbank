@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_xiaoli;
     @ViewInject(value = R.id.srl)
     private SwipeRefreshLayout srl;
+    @ViewInject(value = R.id.im_touxiang)
+    private ImageView im_touxiang;
 
     List<GridViewMessages> list;
     GridViewAdapter gridviewadapter;
@@ -128,6 +131,15 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.in,R.anim.out);
             }
         });
+
+        //头像的事件，待做。。。。。。
+        im_touxiang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                im_touxiang.setImageResource(R.mipmap.login_user_hightlighted);
+            }
+        });
+
     }
 
     @Override
@@ -225,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 Intent intent = new Intent(MainActivity.this,CollectActivity.class);
                 startActivity(intent);
+                mDrawerLayout.closeDrawers();
             }break;
         }
     }

@@ -35,13 +35,13 @@ public class MultiSelectFragment extends Fragment{
         tv_multiselect_c = (TextView) view.findViewById(R.id.tv_multiselect_c);
         tv_multiselect_d = (TextView) view.findViewById(R.id.tv_multiselect_d);
         tv_multiselect_e = (TextView) view.findViewById(R.id.tv_multiselect_e);
-        getData(id);
+        getData();
         return view;
     }
     public void setMultiSelectQuestions(int id){
         this.id = id;
     }
-    public void getData(int id){
+    public void getData(){
         RequestParams params = new RequestParams("http://115.29.136.118:8080/web-question/app/question?method=findone");
         params.addBodyParameter("id",String.valueOf(id));
         params.addBodyParameter("user_id",String.valueOf(2));

@@ -31,13 +31,13 @@ public class ShortAnswerFragment extends Fragment{
         View view = inflater.inflate(R.layout.shortanswerfragment,null);
         tv_ShortAnswer_a = (TextView) view.findViewById(R.id.tv_ShortAnswer_a);
         tv_ShortAnswer_c = (TextView) view.findViewById(R.id.tv_ShortAnswer_c);
-        getData(id);
+        getData();
         return view;
     }
     public void setShortAnswerQuestions(int id){
         this.id = id;
     }
-    public void getData(int id){
+    public void getData(){
         RequestParams params = new RequestParams("http://115.29.136.118:8080/web-question/app/question?method=findone");
         params.addBodyParameter("id",String.valueOf(id));
         params.addBodyParameter("user_id",String.valueOf(2));
@@ -67,6 +67,7 @@ public class ShortAnswerFragment extends Fragment{
         }
     }
     public void settext(String a,String b){
+        System.out.println("该方法执行了。。。。。。。。。。。。。。。。");
         tv_ShortAnswer_a.setText(a);
         tv_ShortAnswer_c.setText(b);
     }

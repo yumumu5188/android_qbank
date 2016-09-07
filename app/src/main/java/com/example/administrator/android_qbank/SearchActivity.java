@@ -44,6 +44,8 @@ public class SearchActivity extends AppCompatActivity{
     private EditText et_timu;
     @ViewInject(value = R.id.lv_01)
     private ListView lv_01;
+    @ViewInject(value = R.id.tv_wanquan1)
+    private TextView tv_wanquan1;
 
     private Toolbar toolbar;
     SearchAdapter searchadapter;
@@ -67,9 +69,11 @@ public class SearchActivity extends AppCompatActivity{
                 Questions question = list.get(position);
                 Intent intent = new Intent(SearchActivity.this,QuestionsFragmentActivity.class);
                 intent.putExtra("question",question);
+                intent.putExtra("size",list.size());
                 startActivity(intent);
             }
         });
+
     }
 
     @Event(value = R.id.tv_timu,type = View.OnClickListener.class)
@@ -170,6 +174,7 @@ public class SearchActivity extends AppCompatActivity{
             if (msg.what == 1){
                 searchadapter = new SearchAdapter(SearchActivity.this,list);
                 lv_01.setAdapter(searchadapter);
+                tv_wanquan1.setVisibility(View.VISIBLE);
             }
             return false;
         }

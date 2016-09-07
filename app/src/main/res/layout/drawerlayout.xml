@@ -42,6 +42,7 @@
             android:gravity="center"
             android:background="@mipmap/home_nav_title">
             <widget.CircleImageView
+                android:id="@+id/im_touxiang"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@mipmap/hugh"
